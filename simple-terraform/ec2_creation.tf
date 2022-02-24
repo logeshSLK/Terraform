@@ -1,13 +1,13 @@
 
 provider "aws" {
-	region = "us-east-1"
+	region = "ap-south-1"
 }
 
 terraform {
   backend "s3" {
     bucket = "terraform-backend-spovedd"
     key    = "terraform.tfstate"
-    region = "us-east-1"
+    region = "ap-south-1"
   }
 }
 
@@ -21,7 +21,7 @@ resource "aws_vpc" "default" {
 resource "aws_subnet" "public-subnet" {
   vpc_id = "${aws_vpc.default.id}"
   cidr_block = "10.0.1.0/24"
-  availability_zone = "us-east-1a"
+  availability_zone = "ap-south-1a"
 
 }
 
@@ -69,19 +69,9 @@ resource "aws_security_group" "sgweb" {
 }
 
 resource "aws_instance" "web" {
-	ami = "ami-032930428bf1abbff"
+	ami = "ami-0c6615d1e95c98aca"
 	instance_type = "t2.micro"
 	subnet_id = "${aws_subnet.public-subnet.id}"
 	vpc_security_group_ids = ["${aws_security_group.sgweb.id}"]
 }
 
-
-resource "aws_s3_bucket" "b" {
-  bucket = "my-tf-test-bucket-fhgfgg"
-  acl    = "private"
-
-  tags = {
-    Name        = "My bucket"
-    Environment = "Dev"
-  }
-}
